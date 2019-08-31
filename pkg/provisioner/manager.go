@@ -29,8 +29,8 @@ import (
 	"github.com/kube-object-storage/lib-bucket-provisioner/pkg/provisioner/api"
 )
 
-// Controller is the first iteration of our internal provisioning
-// Controller.  The passed-in bucket provisioner, coded by the user of the
+// Provisioner is provisioning controller
+// The passed-in bucket provisioner, coded by the user of the
 // library, is stored for later Provision and Delete calls.
 type Provisioner struct {
 	Name            string

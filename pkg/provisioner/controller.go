@@ -42,7 +42,7 @@ type controller interface {
 	Start(<-chan struct{}) error
 }
 
-// Provisioner is a CRD Controller responsible for executing the Reconcile() function in response to OB and OBC events.
+// Controller is a CRD Controller responsible for executing the Reconcile() function in response to OB and OBC events.
 type Controller struct {
 	clientset    kubernetes.Interface
 	libClientset versioned.Interface
@@ -59,6 +59,7 @@ type Controller struct {
 
 var _ controller = &Controller{}
 
+// NewController initializes a new controller
 func NewController(provisionerName string, provisioner api.Provisioner, clientset kubernetes.Interface, crdClientSet versioned.Interface, obcInformer informers.ObjectBucketClaimInformer, obInformer informers.ObjectBucketInformer) *Controller {
 	ctrl := &Controller{
 		clientset:       clientset,
@@ -111,6 +112,7 @@ func (c *Controller) enqueueOBC(obj interface{}) {
 	c.queue.AddRateLimited(key)
 }
 
+// Start runs the controller in the current go routine
 func (c *Controller) Start(stopCh <-chan struct{}) error {
 	defer utilruntime.HandleCrash()
 	defer c.queue.ShutDown()

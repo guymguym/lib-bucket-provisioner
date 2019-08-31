@@ -181,7 +181,7 @@ func (c *Controller) processNextItemInQueue() bool {
 // Reconcile implements the Reconciler interface. This function contains the business logic
 // of the OBC Controller.
 // Note: the obc obtained from the key is not expected to be nil. In other words, this func is
-//   not called when informers detect an object is missing and trigger a formal delete event. 
+//   not called when informers detect an object is missing and trigger a formal delete event.
 //   Instead, delete is indicated by the deletionTimestamp being non-nil on an update event.
 func (c *Controller) syncHandler(key string) error {
 
@@ -339,7 +339,7 @@ func (c *Controller) handleProvisionClaim(key string, obc *v1alpha1.ObjectBucket
 		return fmt.Errorf("error creating OB %q: %v", ob.Name, err)
 	}
 	if ob, err = updateObjectBucketPhase(c.libClientset, ob, v1alpha1.ObjectBucketStatusPhaseBound, defaultRetryBaseInterval, defaultRetryTimeout); err != nil {
-		return fmt.Errorf("error updating OB %q's status to %q:", ob.Name, v1alpha1.ObjectBucketStatusPhaseBound, err)
+		return fmt.Errorf("error updating OB %q's status to %q: %s", ob.Name, v1alpha1.ObjectBucketStatusPhaseBound, err)
 	}
 
 	// update OBC
@@ -442,7 +442,7 @@ func (c *Controller) getResourcesFromKey(key string) (*v1alpha1.ObjectBucket, *c
 // is to remove the finalizer on the OBC so it too will be garbage collected.
 // Returns err if we can't delete one or more of the resources, the final returned error being
 // somewhat arbitrary.
-func (c *Controller) deleteResources(ob *v1alpha1.ObjectBucket, cm *corev1.ConfigMap, s *corev1.Secret, obc *v1alpha1.ObjectBucketClaim) (err error) { 
+func (c *Controller) deleteResources(ob *v1alpha1.ObjectBucket, cm *corev1.ConfigMap, s *corev1.Secret, obc *v1alpha1.ObjectBucketClaim) (err error) {
 	name := obc.Namespace + "/" + obc.Name
 
 	if delErr := deleteObjectBucket(ob, c.libClientset); delErr != nil {
